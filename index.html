@@ -1088,16 +1088,37 @@ if(skillsSec)barObs.observe(skillsSec);
 
 /* ── CONTACT FORM ── */
 function sendForm(){
-  const n=document.getElementById('fn').value.trim();
-  const e=document.getElementById('fe').value.trim();
-  const p=document.getElementById('fp').value.trim();
-  const m=document.getElementById('fm').value.trim();
-  if(!n||!e||!m){alert('Please fill in your name, email, and message.');return}
-  const sub=encodeURIComponent('Enquiry from '+n+' — Portfolio Website');
-  const body=encodeURIComponent('Name: '+n+'\nEmail: '+e+'\nPhone: '+p+'\n\nMessage:\n'+m);
-  window.location.href='mailto:helpdeskwithmohammed@gmail.com?subject='+sub+'&body='+body;
-  document.getElementById('cfWrap').style.display='none';
-  document.getElementById('fsOk').style.display='block';
+
+  async function sendForm(){
+    const n = document.getElementById('fn').value.trim();
+    const e = document.getElementById('fe').value.trim();
+    const p = document.getElementById('fp').value.trim();
+    const m = document.getElementById('fm').value.trim();
+
+    if(!n || !e || !m){
+        alert('Please fill in your name, email, and message.');
+        return;
+    }
+
+    const formData = {
+        name: n,
+        email: e,
+        phone: p,
+        message: m
+    };
+
+    const res = await fetch('https://formspree.io/f/mrerbebl', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+
+    if(res.ok){
+        document.getElementById('cfWrap').style.display='none';
+        document.getElementById('fsOk').style.display='block';
+    } else {
+        alert('Something went wrong. Please try again.');
+    }
 }
 
 /* ── ACTIVE NAV HIGHLIGHT ── */
